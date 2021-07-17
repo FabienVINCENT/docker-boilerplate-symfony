@@ -1,0 +1,29 @@
+version: '3'
+
+services:
+    nginx:
+        build: ./docker/nginx
+        volumes:
+            - ./:/var/www/symfony/:cached
+        ports:
+            - 80:80
+
+    php:
+        build: ./docker/php-fpm
+        volumes:
+            - ./:/var/www/symfony/:cached
+
+    db:
+        image: mariadb
+        restart: always
+        environment:
+            MYSQL_ROOT_PASSWORD: 1234
+            MYSQL_DATABASE: symfony
+
+    phpmyadmin:
+        image: phpmyadmin
+        restart: always
+        ports:
+            - 8080:80
+        environment:
+            MYSQL_HOST: db;root;1234
